@@ -4,11 +4,9 @@ import com.jose.algos.validations.HalfPlusSevenValidation;
 import com.jose.algos.validations.RecipientCannotBeOlderThanSender;
 import com.jose.algos.validations.SenderCannotFriendAnotherUnder100YearsOld;
 import com.jose.algos.validations.Validation;
-import com.sun.source.tree.BinaryTree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -202,6 +200,22 @@ public class App {
         return -1;
     }
 
+    public static int binarySearch7(int[] arr, int key) {
+        int start = 0;
+        int end = arr.length - 1;
+        while (start <= end) {
+            int mid = (start + end) / 2;
+            if (key == arr[mid]) {
+                return mid;
+            } else if (key <= arr[mid]) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return -1;
+    }
+
     //  Given a sorted array and a number x, find the pair in array whose sum is closest to x
 //    public static int[] findPair(int[] arr, int x) {
 //        int pair =
@@ -305,11 +319,17 @@ class SeenAfter {
     }
 
     public int[] results() {
-        return new SeenBefore(
-                new StringBuilder(this.input)
-                        .reverse()
-                        .toString()
-        )
-                .results();
+        String[] tmparray = this.input.split("");
+        int[] results = new int[tmparray.length];
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for(int i = tmparray.length - 1 ; i >= 0; i--) {
+            if (map.get(tmparray[i]) == null) {
+                map.put(tmparray[i], 1);
+                results[i] = 0;
+            } else {
+                results[i] = 1;
+            }
+        }
+        return results;
     }
 }

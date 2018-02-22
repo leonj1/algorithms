@@ -31,14 +31,13 @@ public class AppTest {
     public void testBinarySearchNotFound() {
         int[] arr = {1,21,33,42,50,66,77,81,94,101};
         assertThat(
-                App.binarySearch6(arr, 22),
+                App.binarySearch7(arr, 22),
                 equalTo(-1)
         );
     }
 
     @Test
     public void fact1() {
-        int[] arr = {1,21,33,42,50,66,77,81,94,101};
         assertThat(
                 App.fact(4),
                 equalTo(24)
@@ -51,6 +50,16 @@ public class AppTest {
         int[] arr = {0,1,0,0,1,0};
         assertThat(
                 App.seenBefore2(input, true),
+                equalTo(arr)
+        );
+    }
+
+    @Test
+    public void isSeenAfter() {
+        String input = "aabccd";
+        int[] arr = {1,0,0,1,0,0};
+        assertThat(
+                App.seenBefore2(input, false),
                 equalTo(arr)
         );
     }
