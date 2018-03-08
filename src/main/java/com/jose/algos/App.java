@@ -285,6 +285,46 @@ public class App {
             return new SeenAfter(input).results();
         }
     }
+
+    // determine if one version is larger than another
+    // TODO compare without using objects
+    // TODO compare using objects
+//    public static void versionCompare(String input) {
+//
+//    }
+
+    // implement buy and download button of an App
+
+    // implement data structure to add and fetch Car details (Make, models, color, VIN)
+
+    // Get the top 10 songs played in the last 24 hours
+
+    // find the common node of two integers (a,b) in a tree
+
+}
+
+class Version {
+    private String input;
+
+    Version(String input) {
+        this.input = input;
+    }
+
+    public int compare(String o) {
+        String[] a = this.input.split("\\.");
+        String[] b = o.split("\\.");
+        for(int i = 0; (i < a.length && i < b.length); i++) {
+            if (Integer.valueOf(a[i]) < Integer.valueOf(b[i])) {
+                return -1;
+            } else if (Integer.valueOf(a[i]) > Integer.valueOf(b[i])) {
+                return 1;
+            }
+        }
+        if (a.length < b.length) {
+            return -1;
+        }
+        return 0;
+    }
 }
 
 class SeenBefore {

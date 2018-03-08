@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Unit test for simple App.
@@ -62,5 +63,19 @@ public class AppTest {
                 App.seenBefore2(input, false),
                 equalTo(arr)
         );
+    }
+
+    @Test
+    public void sortArrayOfVersions() {
+        String[] a = new String[]{ "10.2", "12.3.1", "9.8", "7.6.0", "0.0.0"};
+        String[] b = new String[]{ "7.6.0", "9.8", "10.2", "12.3.1", "0.0.0"};
+        int[] expected = new int[]{ 1, 1, -1, -1, 0};
+        for (int i = 0; i<a.length; i++) {
+            assertThat(
+                    String.format("For %s vs %s expected %s", a[i], b[i], expected[i]),
+                    new Version(a[i]).compare(b[i]),
+                    equalTo(expected[i])
+            );
+        }
     }
 }
