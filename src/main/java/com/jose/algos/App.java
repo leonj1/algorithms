@@ -7,8 +7,10 @@ import com.jose.algos.validations.Validation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Hello world!
@@ -286,13 +288,6 @@ public class App {
         }
     }
 
-    // determine if one version is larger than another
-    // TODO compare without using objects
-    // TODO compare using objects
-//    public static void versionCompare(String input) {
-//
-//    }
-
     // implement buy and download button of an App
 
     // implement data structure to add and fetch Car details (Make, models, color, VIN)
@@ -303,6 +298,76 @@ public class App {
 
 }
 
+class CarDataStore {
+    private Map<String, Map<String, Map<String, Map<String, Set<String>>>>> store;
+
+    public CarDataStore(Map<String, Map<String, Map<String, Map<String, Set<String>>>>> store) {
+        this.store = store;
+    }
+
+    public void add(String make, String model, String color, String vin) {
+        foo(make, model, color, vin);
+        foo("*", model, color, vin);
+        foo(make, "*", color, vin);
+        foo(make, model, "*", vin);
+        foo("*", "*", color, vin);
+        foo(make, "*", "*", vin);
+        foo("*", model, "*", vin);
+        foo("*", "*", "*", vin);
+    }
+
+    private void foo(String make, String model, String color, String vin) {
+        Map<String, Map<String, Map<String, Set<String>>>> makes = this.store.get(make);
+        if (makes == null) {
+            makes = new HashMap<String, Map<String, Map<String, Set<String>>>>() {{
+                put(
+                        make,
+                        new HashMap<String, Map<String, Set<String>>>()
+                );
+            }};
+        }
+        Map<String, Map<String, Set<String>>> models = makes.get(model);
+        if (models == null) {
+            models = new HashMap<String, Map<String, Set<String>>>() {{
+                put(
+                        model,
+                        new HashMap<String, Set<String>>()
+                );
+            }};
+        }
+        Map<String, Set<String>> colors = models.get(color);
+        if (colors == null) {
+            colors = new HashMap<String, Set<String>>() {{
+                put(
+                        color,
+                        new HashSet<String>() {{ add(vin); }}
+                );
+            }};
+        } else {
+            Set<String> vins = colors.get(color);
+            if (vins == null) {
+                vins = new HashSet<String>();
+            }
+            vins.add(vin);
+            colors.put(color, vins);
+        }
+        models.put(color, colors);
+        makes.put(model, models);
+        this.store.put(make, makes);
+    }
+
+    public Set<String> get(String make, String model, String color) {
+        Map<String, Map<String, Map<String, Set<String>>>> makes = this.store.get(make);
+        Map<String, Map<String, Set<String>>> models = makes.get(model);
+        Map<String, Set<String>> colors = models.get(color);
+        Set<String> vins = colors.get(color);
+        return vins;
+    }
+}
+
+// determine if one version is larger than another
+// TODO compare without using objects
+// TODO compare using objects
 class Version {
     private String input;
 
