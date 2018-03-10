@@ -19,22 +19,6 @@ public class AppTest {
 
     @Before
     public void setup() {
-//        Set<String> vins = new HashSet<>();
-//        HashMap<String, Set> colors = new HashMap<>();
-//        HashMap<String, Map> models = new HashMap<>();
-//        HashMap<String, Map> makes = new HashMap<>();
-//        colors.put(
-//                "*",
-//                vins
-//        );
-//        models.put(
-//                "*",
-//                colors
-//        );
-//        makes.put(
-//                "*",
-//                models
-//        );
         this.carDataStore = new CarDataStore(
                 new HashMap<String, Map<String, Map<String, Map<String, Set<String>>>>>()
         );
@@ -115,6 +99,12 @@ public class AppTest {
                 "Prius",
                 "Blue",
                 "1"
+        );
+        carDataStore.add(
+                "Toyota",
+                "Highlander",
+                "Brown",
+                "2"
         );
     }
 
