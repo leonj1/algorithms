@@ -16,11 +16,51 @@ import static org.junit.Assert.assertThat;
  */
 public class AppTest {
     private CarDataStore carDataStore;
+    private CommonTreeNode commonTreeNode;
 
     @Before
     public void setup() {
         this.carDataStore = new CarDataStore(
                 new HashMap<String, Map<String, Map<String, Map<String, Set<String>>>>>()
+        );
+        this.commonTreeNode = new CommonTreeNode(
+                new Node(
+                        0,
+                        new Node(
+                                1,
+                                new Node(
+                                        3,
+                                        new Node(5,null, null),
+                                        new Node(6,null, null)
+                                ),
+                                new Node(
+                                        4,
+                                        new Node(7,null,null),
+                                        new Node(8,null,null)
+                                )
+                        ),
+                        new Node(
+                                2,
+                                new Node(
+                                        31,
+                                        new Node(10,null,null),
+                                        new Node(20,null,null)
+                                ),
+                                new Node(
+                                        40,
+                                        new Node(
+                                                19,
+                                                new Node(
+                                                        120,
+                                                        null,
+                                                        null
+                                                ),
+                                                null
+                                        ),
+                                        null
+                                )
+                        )
+                )
         );
     }
 
@@ -134,4 +174,28 @@ public class AppTest {
 //    public void getCarVinsFromWildCardSpecsFromDataStructure() {
 //
 //    }
+
+    @Test
+    public void findTheSameImmediateParentNode() {
+        assertThat(
+                this.commonTreeNode.findCommonNode(31,40).value(),
+                equalTo(2)
+        );
+    }
+
+    @Test
+    public void findTheSameDistantParentNode() {
+        assertThat(
+                this.commonTreeNode.findCommonNode(31,120).value(),
+                equalTo(2)
+        );
+    }
+
+    @Test
+    public void findSameParentNodeWhenTargetNodesAreChained() {
+        assertThat(
+                this.commonTreeNode.findCommonNode(19,120).value(),
+                equalTo(40)
+        );
+    }
 }

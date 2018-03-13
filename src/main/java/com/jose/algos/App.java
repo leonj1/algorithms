@@ -10,7 +10,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 /**
  * Hello world!
@@ -290,12 +293,111 @@ public class App {
 
     // implement buy and download button of an App
 
-    // implement data structure to add and fetch Car details (Make, models, color, VIN)
-
     // Get the top 10 songs played in the last 24 hours
 
-    // find the common node of two integers (a,b) in a tree
+}
 
+class Node {
+    private int value;
+    private Node left;
+    private Node right;
+
+    Node(int value, Node left, Node right) {
+        this.value = value;
+        this.left = left;
+        this.right = right;
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public Node left() {
+        return left;
+    }
+
+    public Node right() {
+        return right;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return value == node.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+}
+
+// find the common node of two integers (a,b) in a tree
+class CommonTreeNode {
+
+    private Node root;
+    private Stack<Node> aStack;
+    private Stack<Node> bStack;
+
+    CommonTreeNode(Node root) {
+        this.root = root;
+        this.aStack = new Stack<Node>();
+        this.bStack = new Stack<Node>();
+    }
+
+    public Node findCommonNode(int a, int b) {
+        // find a
+        this.aStack.clear();
+        boolean aFound = find(this.root, a, this.aStack);
+        if (!aFound) {
+            return null;
+        }
+        boolean bFound = find(this.root, b, this.bStack);
+        if (!bFound) {
+            return null;
+        }
+        List<Node> intersect = bStack
+                .stream()
+                .collect(Collectors.toList())
+                .stream()
+                .filter(aStack
+                        .stream()
+                        .collect(Collectors.toList())
+                        ::contains
+                ).collect(Collectors.toList());
+        if (intersect.size() == 0) {
+            return null;
+        }
+        return intersect.get(intersect.size()-1);
+    }
+
+    private boolean find(Node topNode, int val, Stack stack) {
+        if (topNode == null) {
+            return false;
+        }
+        if (topNode.value() == val) {
+            return true;
+        }
+
+        stack.push(topNode);
+        if (topNode.left() != null) {
+            if (find(topNode.left(), val, stack)) {
+                return true;
+            }
+        }
+        if(topNode.right() == null) {
+            stack.pop();
+            return false;
+        }
+
+        if (find(topNode.right(), val, stack)) {
+            return true;
+        }
+        stack.pop();
+        return false;
+    }
 }
 
 class CarDataStore {
