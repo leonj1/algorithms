@@ -170,10 +170,27 @@ public class AppTest {
         );
     }
 
-//    @Test
-//    public void getCarVinsFromWildCardSpecsFromDataStructure() {
-//
-//    }
+    @Test
+    public void getCarVinsFromWildCardSpecsFromDataStructure() {
+        carDataStore.add(
+                "Toyota",
+                "Prius",
+                "Blue",
+                "1"
+        );
+        assertThat(
+                this.carDataStore.get(
+                        "Toyota",
+                        "*",
+                        "Blue"
+                ),
+                equalTo(
+                        new HashSet<String>() {{
+                            add("1");
+                        }}
+                )
+        );
+    }
 
     @Test
     public void findTheSameImmediateParentNode() {
