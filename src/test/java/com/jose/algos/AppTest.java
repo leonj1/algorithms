@@ -3,9 +3,11 @@ package com.jose.algos;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -30,21 +32,21 @@ public class AppTest {
                                 1,
                                 new Node(
                                         3,
-                                        new Node(5,null, null),
-                                        new Node(6,null, null)
+                                        new Node(5, null, null),
+                                        new Node(6, null, null)
                                 ),
                                 new Node(
                                         4,
-                                        new Node(7,null,null),
-                                        new Node(8,null,null)
+                                        new Node(7, null, null),
+                                        new Node(8, null, null)
                                 )
                         ),
                         new Node(
                                 2,
                                 new Node(
                                         31,
-                                        new Node(10,null,null),
-                                        new Node(20,null,null)
+                                        new Node(10, null, null),
+                                        new Node(20, null, null)
                                 ),
                                 new Node(
                                         40,
@@ -195,7 +197,7 @@ public class AppTest {
     @Test
     public void findTheSameImmediateParentNode() {
         assertThat(
-                this.commonTreeNode.findCommonNode(31,40).value(),
+                this.commonTreeNode.findCommonNode(31, 40).value(),
                 equalTo(2)
         );
     }
@@ -203,7 +205,7 @@ public class AppTest {
     @Test
     public void findTheSameDistantParentNode() {
         assertThat(
-                this.commonTreeNode.findCommonNode(31,120).value(),
+                this.commonTreeNode.findCommonNode(31, 120).value(),
                 equalTo(2)
         );
     }
@@ -211,8 +213,48 @@ public class AppTest {
     @Test
     public void findSameParentNodeWhenTargetNodesAreChained() {
         assertThat(
-                this.commonTreeNode.findCommonNode(19,120).value(),
+                this.commonTreeNode.findCommonNode(19, 120).value(),
                 equalTo(40)
+        );
+    }
+
+    @Test
+    public void getTopTenSongs() {
+        TopTenSongs topTenSongs = new TopTenSongs(
+                new PriorityQueue<String>(),
+                new HashMap<String, Integer>()
+        );
+        topTenSongs.add("1");
+        topTenSongs.add("2");
+        topTenSongs.add("3");
+        topTenSongs.add("4");
+        topTenSongs.add("5");
+        topTenSongs.add("6");
+        topTenSongs.add("7");
+        topTenSongs.add("8");
+        topTenSongs.add("9");
+        topTenSongs.add("10");
+        topTenSongs.add("11");
+        topTenSongs.add("12");
+        topTenSongs.add("13");
+        topTenSongs.add("1");
+        topTenSongs.add("2");
+        assertThat(
+                topTenSongs.topTen(),
+                equalTo(
+                        new ArrayList<String>() {{
+                            add("1");
+                            add("2");
+                            add("3");
+                            add("4");
+                            add("5");
+                            add("6");
+                            add("7");
+                            add("8");
+                            add("9");
+                            add("10");
+                        }}
+                )
         );
     }
 }

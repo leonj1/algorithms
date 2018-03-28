@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -34,6 +35,12 @@ public class App {
         );
 
 //        int numOfRequest = count_all_friend_requests([120, 45, 55, 230, 400, 88, 300, 101], validation);
+
+        // pay off largest to smallest
+
+
+        // pay off smallest to largest
+
     }
 
     private static int count_all_friend_requests(int[] arr, Validation validation) {
@@ -295,6 +302,73 @@ public class App {
 
     // Get the top 10 songs played in the last 24 hours
 
+}
+
+class Song implements Comparable<Song> {
+    private String name;
+    private Integer count;
+
+    public Song(String name, Integer count) {
+        this.name = name;
+        this.count = count;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Song song = (Song) o;
+        return Objects.equals(name, song.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public int compareTo(Song o) {
+        if(o.getCount() > this.count) {
+            return 1;
+        } else if(o.getCount() < this.count) {
+            return -1;
+        }
+        return 0;
+    }
+}
+
+class TopTenSongs {
+    private PriorityQueue<String> queue;
+    private Map<String, Integer> songs;
+
+    public TopTenSongs(PriorityQueue<String> queue, Map<String, Integer> songs) {
+        this.queue = queue;
+        this.songs = songs;
+    }
+
+    public void add(String song) {
+        Integer count = this.songs.get(song);
+        if(count == null) {
+            this.songs.put(song, 1);
+            return;
+        }
+        count++;
+        this.songs.put(song, count);
+
+
+    }
+
+    public List<String> topTen() {
+        return null;
+    }
 }
 
 class Node {
