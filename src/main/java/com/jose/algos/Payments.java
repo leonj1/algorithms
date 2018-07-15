@@ -12,7 +12,7 @@ import java.util.Stack;
 /**
  * This class exists to test a theory that paying off credit cards by largest vs smallest balances is better.
  * Its not. Paying by smallest balances is better since as time goes on your payments become larger and pay off the larger cards faster.
- * 
+ *
  * Created for K and M Consulting LLC.
  * Created by Jose M Leon 2018
  **/
@@ -20,10 +20,10 @@ public class Payments {
     public static void main(String[] args) {
         Queue<Account> q = new PriorityQueue<>(5, new SmallestAccountFirstComparator());
 //        Queue<Account> q = new PriorityQueue<>(5, new LargestAccountFirstComparator());
-        q.add(new Account("sapphire", 8800, 24.24f));
-        q.add(new Account("lasik", 3700, 24.99f));
-        q.add(new Account("amazon", 2500, 23.49f));
-        q.add(new Account("Capital One", 49.60f, 23.49f));
+        q.add(new Account("sapphire", 8400f, 24.24f));
+        q.add(new Account("lasik", 3700f, 24.99f));
+        q.add(new Account("amazon", 2515f, 23.49f));
+        q.add(new Account("Capital One", 62.62f, 23.49f));
         q.add(new Account("Credit One", 135.94f, 23.49f));
 
         float paycheck;

@@ -1,11 +1,14 @@
 package com.jose.algos;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -218,6 +221,7 @@ public class AppTest {
         );
     }
 
+    @Ignore
     @Test
     public void getTopTenSongs() {
         TopTenSongs topTenSongs = new TopTenSongs(
@@ -241,7 +245,7 @@ public class AppTest {
         topTenSongs.add("2");
         assertThat(
                 topTenSongs.topTen(),
-                equalTo(
+                Matchers.<List<String>>equalTo(
                         new ArrayList<String>() {{
                             add("1");
                             add("2");
@@ -256,5 +260,78 @@ public class AppTest {
                         }}
                 )
         );
+    }
+
+    @Test
+    public void permutationsUsingString() {
+        // Using String is expected to be easier since Strings are immutable
+        List<String> results = new ArrayList<>();
+        permutations("", "abc", results);
+        assertThat(
+                results,
+                Matchers.<List<String>>equalTo(
+                        new ArrayList<String>() {{
+                            add("abc");
+                            add("acb");
+                            add("bac");
+                            add("bca");
+                            add("cab");
+                            add("cba");
+                        }}
+                )
+        );
+    }
+
+    @Test
+    public void permutationsUsingArray() {
+        List<int[]> results = new ArrayList<>();
+        arrPermutations(new int[]{1,2,3}, 0, results);
+        assertThat(results.size(), equalTo(6));
+        assertThat(results.get(0), equalTo(new int[]{1,2,3}));
+        assertThat(results.get(1), equalTo(new int[]{1,3,2}));
+        assertThat(results.get(2), equalTo(new int[]{2,1,3}));
+        assertThat(results.get(3), equalTo(new int[]{2,3,1}));
+        assertThat(results.get(4), equalTo(new int[]{3,2,1}));
+        assertThat(results.get(5), equalTo(new int[]{3,1,2}));
+    }
+
+    /**
+     * Permutation using String (easy)
+     * Prefix is initially empty string, but the goal is to slowly move the chars from suffix to prefix 1 char at a time
+     * Once suffix is empty add that to list.
+     * The "i" in for loop is a pointer which tracks which char to swap out
+     */
+    private void permutations(String prefix, String suffix, List<String> result) {
+        if("".equals(suffix)) {
+            result.add(prefix + suffix);
+        }
+        for(int i = 0; i < suffix.length(); i++) {
+            permutations(
+                    prefix + Character.toString(suffix.charAt(i)),
+                    suffix.substring(0,i) + suffix.substring(i+1,suffix.length()),
+                    result
+            );
+        }
+    }
+
+    private void arrPermutations(int[] a, int start, List<int[]> list) {
+        if(start >= a.length) {
+            list.add(a.clone());
+        }
+        for(int i=start; i<a.length; i++) {
+            swap(a, start, i);
+            arrPermutations(
+                    a,
+                    start + 1,
+                    list
+            );
+            swap(a, start, i);
+        }
+    }
+
+    private void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
     }
 }
