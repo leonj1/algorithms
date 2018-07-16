@@ -7,6 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -226,42 +227,41 @@ public class AppTest {
     @Ignore
     @Test
     public void getTopTenSongs() {
-        TopTenSongs topTenSongs = new TopTenSongs(
-                new PriorityQueue<String>(),
-                new HashMap<String, Integer>()
-        );
-        topTenSongs.add("1");
-        topTenSongs.add("2");
-        topTenSongs.add("3");
-        topTenSongs.add("4");
-        topTenSongs.add("5");
-        topTenSongs.add("6");
-        topTenSongs.add("7");
-        topTenSongs.add("8");
-        topTenSongs.add("9");
-        topTenSongs.add("10");
-        topTenSongs.add("11");
-        topTenSongs.add("12");
-        topTenSongs.add("13");
-        topTenSongs.add("1");
-        topTenSongs.add("2");
+      Map<String, Minute> map = new HashMap<>();
+//      get time without seconds
+//      Timestamp ts = new Timestamp(t*1000);
+//      String s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(ts);
+        String currentTimeWithoutSeconds = "currentTimeWithoutSeconds";
+        map.putIfAbsent(currentTimeWithoutSeconds, new Minute(currentTimeWithoutSeconds));
+
+        Minute minute = map.get(currentTimeWithoutSeconds);
+        for(int i=1; i<=10; i++) {
+          addTimes(minute, Integer.toString(i), i);
+        }
+
         assertThat(
-                topTenSongs.topTen(),
-                Matchers.<List<String>>equalTo(
-                        new ArrayList<String>() {{
-                            add("1");
-                            add("2");
-                            add("3");
-                            add("4");
-                            add("5");
-                            add("6");
-                            add("7");
-                            add("8");
-                            add("9");
-                            add("10");
+            Arrays.asList(minute.topTen()),
+                Matchers.equalTo(
+                        new ArrayList<SongTwo>() {{
+                            add(new SongTwo("1"));
+                            add(new SongTwo("2"));
+                            add(new SongTwo("3"));
+                            add(new SongTwo("4"));
+                            add(new SongTwo("5"));
+                            add(new SongTwo("6"));
+                            add(new SongTwo("7"));
+                            add(new SongTwo("8"));
+                            add(new SongTwo("9"));
+                            add(new SongTwo("10"));
                         }}
                 )
         );
+    }
+
+    private void addTimes(Minute minute, String name, int count) {
+      for(int i = 0; i<count; i++) {
+        minute.add(name);
+      }
     }
 
     @Test

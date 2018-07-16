@@ -6,6 +6,8 @@ import com.jose.algos.validations.SenderCannotFriendAnotherUnder100YearsOld;
 import com.jose.algos.validations.Validation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -304,6 +308,114 @@ public class App {
 
 }
 
+class Minute {
+    private final ConcurrentHashMap<SongTwo, AtomicLong> map = new ConcurrentHashMap<>();
+    private final PriorityQueue<SongTwo> topTen;
+    private String name;
+    private int size;
+
+    Minute(String name) {
+        this.name = name;
+        this.size = 10;
+        this.topTen = new PriorityQueue<SongTwo>(size, new Comparator<SongTwo>() {
+            @Override
+            public int compare(SongTwo o1, SongTwo o2) {
+                return o1.count() - o2.count();
+            }
+        });
+    }
+
+    public synchronized void add(String name) {
+        SongTwo song = new SongTwo(name);
+        this.map.putIfAbsent(song, new AtomicLong(0));
+        long numTimesPlayed = this.map.get(song).incrementAndGet();
+        if(this.topTen.size() < this.size) {
+            this.topTen.add(song);
+        } else {
+            if (this.size == this.topTen.size()) {
+                this.topTen.poll();
+            }
+            this.topTen.add(song);
+        }
+    }
+
+    public synchronized SongTwo[] topTen() {
+        SongTwo[] songs = this.topTen.toArray(new SongTwo[this.topTen.size()]);
+        Arrays.sort(songs, this.topTen.comparator());
+        return songs;
+    }
+
+    public String name() {
+        return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Minute minute = (Minute) o;
+        return Objects.equals(name, minute.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Minute{" +
+            "map=" + map +
+            ", topTen=" + topTen +
+            ", name='" + name + '\'' +
+            ", size=" + size +
+            '}';
+    }
+}
+
+class SongTwo {
+    private String name;
+    private int count;
+
+    SongTwo(String name) {
+        this.name = name;
+        this.count = 1;
+    }
+
+    public void increment() {
+        this.count++;
+    }
+
+    public String name() {
+        return this.name;
+    }
+
+    public int count() {
+        return this.count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SongTwo songTwo = (SongTwo) o;
+        return Objects.equals(name, songTwo.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "SongTwo{" +
+            "name='" + name + '\'' +
+            ", count=" + count +
+            '}';
+    }
+}
+
 class Song implements Comparable<Song> {
     private String name;
     private Integer count;
@@ -345,31 +457,30 @@ class Song implements Comparable<Song> {
     }
 }
 
-class TopTenSongs {
-    private PriorityQueue<String> queue;
-    private Map<String, Integer> songs;
-
-    public TopTenSongs(PriorityQueue<String> queue, Map<String, Integer> songs) {
-        this.queue = queue;
-        this.songs = songs;
-    }
-
-    public void add(String song) {
-        Integer count = this.songs.get(song);
-        if(count == null) {
-            this.songs.put(song, 1);
-            return;
-        }
-        count++;
-        this.songs.put(song, count);
-
-
-    }
-
-    public List<String> topTen() {
-        return null;
-    }
-}
+//class TopTenSongs {
+//    private PriorityQueue<String> queue;
+//    private Map<String, Integer> songs;
+//    private List<String> songs;
+//
+//    public TopTenSongs(PriorityQueue<String> queue, Map<String, Integer> songs) {
+//        this.queue = queue;
+//        this.songs = songs;
+//    }
+//
+//    public void add(String song) {
+//        Integer count = this.songs.get(song);
+//        if(count == null) {
+//            this.songs.put(song, 1);
+//            return;
+//        }
+//        count++;
+//        this.songs.put(song, count);
+//    }
+//
+//    public List<String> topTen() {
+//        return null;
+//    }
+//}
 
 class Node {
     private int value;

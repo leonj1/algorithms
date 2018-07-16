@@ -59,8 +59,15 @@ public class Tree {
         return stack;
     }
 
+    public String toJson() {
+        return this.root.toJson();
+    }
+
     @Override
     public String toString() {
-        return this.root.toString();
+        return "Tree{" +
+            "root=" + root +
+            ", delimiter='" + delimiter + '\'' +
+            '}';
     }
 }

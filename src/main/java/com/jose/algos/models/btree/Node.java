@@ -147,8 +147,7 @@ public class Node {
         return Objects.hash(name, contents, children);
     }
 
-    @Override
-    public String toString() {
+    public String toJson() {
         StringJoiner sj = new StringJoiner(",");
         for(Node n : children) {
             sj.add(n.toString());
@@ -162,5 +161,14 @@ public class Node {
         }
         main.add("\"children\" : [" + sj.toString() + "]");
         return "{" + main.toString() + "}";
+    }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+            "name='" + name + '\'' +
+            ", contents='" + contents + '\'' +
+            ", children=" + children +
+            '}';
     }
 }
