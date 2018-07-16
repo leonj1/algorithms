@@ -58,4 +58,9 @@ public class Tree {
         }
         return stack;
     }
+
+    @Override
+    public String toString() {
+        return this.root.toString();
+    }
 }

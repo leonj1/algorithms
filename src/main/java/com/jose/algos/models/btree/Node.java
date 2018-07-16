@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.StringJoiner;
 
 /**
  * Created for K and M Consulting LLC.
@@ -148,10 +149,18 @@ public class Node {
 
     @Override
     public String toString() {
-        return "Node{" +
-                "name='" + name + '\'' +
-                ", contents='" + contents + '\'' +
-                ", children=" + children +
-                '}';
+        StringJoiner sj = new StringJoiner(",");
+        for(Node n : children) {
+            sj.add(n.toString());
+        }
+        StringJoiner main = new StringJoiner(",");
+        if(name != null) {
+            main.add("\"name\" : \"" + name + "\"");
+        }
+        if(contents != null) {
+            main.add("\"contents\" : \"" + contents + "\"");
+        }
+        main.add("\"children\" : [" + sj.toString() + "]");
+        return "{" + main.toString() + "}";
     }
 }

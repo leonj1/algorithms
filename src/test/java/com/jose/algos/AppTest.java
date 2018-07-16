@@ -1,6 +1,5 @@
 package com.jose.algos;
 
-import com.google.gson.Gson;
 import com.jose.algos.models.btree.Tree;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -15,11 +14,9 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
-import static net.javacrumbs.jsonunit.assertj.JsonAssertions.json;
 
 /**
  * Unit test for simple App.
@@ -330,9 +327,8 @@ public class AppTest {
                         new com.jose.algos.models.btree.Node("bar")
                 )
         );
-        Gson gson = new Gson();
         assertThatJson(
-                gson.toJson(tree.getPath("/"))
+                tree.toString() // uses a custom toString() in Node to generate json
         ).isEqualTo(
                 "{" +
                         "  \"name\": \"\\/\"," +
