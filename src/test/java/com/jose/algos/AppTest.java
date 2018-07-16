@@ -1,5 +1,7 @@
 package com.jose.algos;
 
+import com.google.gson.Gson;
+import com.jose.algos.models.btree.Tree;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -15,6 +17,9 @@ import java.util.Set;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
+
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.json;
 
 /**
  * Unit test for simple App.
@@ -285,14 +290,70 @@ public class AppTest {
     @Test
     public void permutationsUsingArray() {
         List<int[]> results = new ArrayList<>();
-        arrPermutations(new int[]{1,2,3}, 0, results);
+        arrPermutations(new int[]{1, 2, 3}, 0, results);
         assertThat(results.size(), equalTo(6));
-        assertThat(results.get(0), equalTo(new int[]{1,2,3}));
-        assertThat(results.get(1), equalTo(new int[]{1,3,2}));
-        assertThat(results.get(2), equalTo(new int[]{2,1,3}));
-        assertThat(results.get(3), equalTo(new int[]{2,3,1}));
-        assertThat(results.get(4), equalTo(new int[]{3,2,1}));
-        assertThat(results.get(5), equalTo(new int[]{3,1,2}));
+        assertThat(results.get(0), equalTo(new int[]{1, 2, 3}));
+        assertThat(results.get(1), equalTo(new int[]{1, 3, 2}));
+        assertThat(results.get(2), equalTo(new int[]{2, 1, 3}));
+        assertThat(results.get(3), equalTo(new int[]{2, 3, 1}));
+        assertThat(results.get(4), equalTo(new int[]{3, 2, 1}));
+        assertThat(results.get(5), equalTo(new int[]{3, 1, 2}));
+    }
+
+    @Test
+    public void testAddPathFileSystemTree() {
+        String path = "/temp";
+        Tree tree = new Tree();
+        assertThat(
+                tree.mkdir(path),
+                equalTo(true)
+        );
+        assertThat(
+                tree.getPath(path),
+                equalTo(
+                        new com.jose.algos.models.btree.Node("temp")
+                )
+        );
+    }
+
+    @Test
+    public void testAddNestedPathFileSystemTree() {
+        String path = "/temp/foo/bar";
+        Tree tree = new Tree();
+        assertThat(
+                tree.mkdirs(path),
+                equalTo(true)
+        );
+        assertThat(
+                tree.getPath(path),
+                equalTo(
+                        new com.jose.algos.models.btree.Node("bar")
+                )
+        );
+        Gson gson = new Gson();
+        assertThatJson(
+                gson.toJson(tree.getPath("/"))
+        ).isEqualTo(
+                "{" +
+                        "  \"name\": \"\\/\"," +
+                        "  \"children\": [" +
+                        "    {" +
+                        "      \"name\": \"temp\"," +
+                        "      \"children\": [" +
+                        "        {" +
+                        "          \"name\": \"foo\"," +
+                        "          \"children\": [" +
+                        "            {" +
+                        "              \"name\": \"bar\"," +
+                        "              \"children\": []" +
+                        "            }" +
+                        "          ]" +
+                        "        }" +
+                        "      ]" +
+                        "    }" +
+                        "  ]" +
+                        "}"
+        );
     }
 
     /**
@@ -302,23 +363,23 @@ public class AppTest {
      * The "i" in for loop is a pointer which tracks which char to swap out
      */
     private void permutations(String prefix, String suffix, List<String> result) {
-        if("".equals(suffix)) {
+        if ("".equals(suffix)) {
             result.add(prefix + suffix);
         }
-        for(int i = 0; i < suffix.length(); i++) {
+        for (int i = 0; i < suffix.length(); i++) {
             permutations(
                     prefix + Character.toString(suffix.charAt(i)),
-                    suffix.substring(0,i) + suffix.substring(i+1,suffix.length()),
+                    suffix.substring(0, i) + suffix.substring(i + 1, suffix.length()),
                     result
             );
         }
     }
 
     private void arrPermutations(int[] a, int start, List<int[]> list) {
-        if(start >= a.length) {
+        if (start >= a.length) {
             list.add(a.clone());
         }
-        for(int i=start; i<a.length; i++) {
+        for (int i = start; i < a.length; i++) {
             swap(a, start, i);
             arrPermutations(
                     a,
